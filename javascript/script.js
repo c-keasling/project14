@@ -100,3 +100,29 @@ submitButton.addEventListener("click", (e) => {
     }, 1500);
   }
 });
+// google maps initiate function
+function initMap() {
+  const coordinates = { lat: 37.42204, lng: -122.08281 };
+
+  const map = new google.maps.Map(document.getElementById("map"), {
+    zoom: 13,
+    center: coordinates,
+  });
+
+  const marker = new google.maps.Marker({
+    position: coordinates,
+    map: map,
+  });
+  const circle = new google.maps.Circle({
+    strokeColor: "blue",
+    strokeOpacity: 0.8,
+    strokeWeight: 2,
+    fillColor: "#FFF",
+    fillOpacity: 0.5,
+    map,
+    center: coordinates,
+    radius: 600,
+  });
+}
+
+window.initMap = initMap;

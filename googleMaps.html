@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Google Maps</title>
+    <style>
+      /* Styles for the container of the map and form */
+      #container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding-top: 50px;
+      }
+
+      /* Styles for the map */
+      #map {
+        width: 800px;
+        height: 600px;
+      }
+
+      /* Styles for the form */
+      #lat-lng-form {
+        margin-top: 20px; /* Space between the map and the form inputs */
+      }
+
+      /* Styles for the input fields */
+      .text-box {
+        color: black; /* Text color for input */
+        background-color: white; /* Background color for input */
+        border: 1px solid black; /* Border color */
+        box-shadow: 0 0 5px aqua; /* Box shadow with aqua color */
+        margin-bottom: 10px; /* Space between input fields */
+        padding: 5px; /* Padding inside input fields */
+      }
+
+      /* Styles for the submit button */
+      .submit-button {
+        background-color: aqua; /* Background color for button */
+        color: black; /* Text color for button */
+        border: none; /* No border for a flat design */
+        padding: 10px 20px; /* Padding inside the button */
+        cursor: pointer; /* Cursor to indicate button functionality */
+      }
+
+      /* Change submit button styling on hover for a nice effect */
+      .submit-button:hover {
+        background-color: blue; /* Darker shade on hover */
+      }
+    </style>
+  </head>
+  <body style="background-color: black">
+    <div id="container">
+      <div id="map"></div>
+      <!-- Map Form for entering latitude and longitude -->
+      <form id="lat-lng-form" onsubmit="return updateMapWithFormValues();">
+        <!--Probably should add some sytling to these input elements later but I am running out of time-->
+        <input
+          type="text"
+          class="text-box"
+          id="latitude"
+          placeholder="Latitude"
+          required
+        />
+        <input
+          type="text"
+          class="text-box"
+          id="longitude"
+          placeholder="Longitude"
+          required
+        />
+        <input type="submit" value="Submit" class="submit-button" />
+      </form>
+    </div>
+    <script>
+      //initially declare the variables to be used in the initMap funtion
+      let map, marker, circle;
+      //initialize the map using default coordianates using the codio code learned in the lesson
+      function initMap() {
+        // Default coordinates from las vegas nevada
+        const coordinates = { lat: 36.18811, lng: -115.176468 };
+
+        // Initialize the map
+        map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 13,
+          center: coordinates,
+        });
+
+        // Initialize the marker
+        marker = new google.maps.Marker({
+          position: coordinates,
+          map: map,
+        });
+
+        // Initialize the circle
+        circle = new google.maps.Circle({
+          strokeColor: "red",
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillColor: "#FFF",
+          fillOpacity: 0.35,
+          map: map,
+          center: coordinates,
+          radius: 600,
+        });
+      }
+
+      // Function to update map based on form submission
+      function updateMapWithFormValues() {
+        // Function to prevent the default form submission
+        event.preventDefault();
+
+        // Get the latitude and longitude values from the form
+        const lat = parseFloat(document.getElementById("latitude").value);
+        const lng = parseFloat(document.getElementById("longitude").value);
+
+        // Validate latitude and longitude so if either lat or lng is not a number then alert and return false
+        if (isNaN(lat) || isNaN(lng)) {
+          alert("Please enter valid latitude and longitude values.");
+          return false;
+        }
+
+        // New coordinates object
+        const newCoordinates = { lat: lat, lng: lng };
+
+        // Set the center of the map
+        map.setCenter(newCoordinates);
+
+        // Place the marker at the new location
+        marker.setPosition(newCoordinates);
+
+        // Set the circle to the new location
+        circle.setCenter(newCoordinates);
+
+        return false; // Do not submit the form if either lat or lng is not a number
+      }
+
+      window.initMap = initMap;
+    </script>
+    <!-- Replace YOUR_API_KEY in the script below with your actual API key -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdtykhdATFCNRe58dx58UYef9PHS3LNEc&callback=initMap&v=weekly"
+      defer
+    ></script>
+  </body>
+</html>
